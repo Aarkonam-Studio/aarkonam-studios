@@ -4,9 +4,10 @@
  * In production, this service posts form payloads to the endpoint configured in
  * VITE_CONTACT_API_ENDPOINT (e.g., Formspree, Resend backend, AWS Lambda, or custom API).
  * 
- * If no endpoint is configured, it operates in simulated development mode, returning a verified
- * success result after simulating network latency, ensuring local testing without mock failures.
+ * Submissions are also reliably recorded in the internal unified store so authorized
+ * studio administrators can immediately review, tag, and track them at /admin/enquiries.
  */
+import { store } from './storeService';
 
 export async function submitContactInquiry(formData) {
   const endpoint = import.meta.env.VITE_CONTACT_API_ENDPOINT;
@@ -28,6 +29,9 @@ export async function submitContactInquiry(formData) {
     clientOrigin: typeof window !== 'undefined' ? window.location.origin : 'direct'
   };
 
+  // Record into store for the admin panel
+  const storedRecord = store.addEnquiry(payload);
+
   // If a production API endpoint is supplied via environment variables
   if (endpoint && endpoint !== 'https://api.aarkonamstudios.com/v1/inquiries/placeholder') {
     try {
@@ -47,7 +51,7 @@ export async function submitContactInquiry(formData) {
 
       return {
         success: true,
-        referenceId: `ARK-${Math.floor(100000 + Math.random() * 900000)}`,
+        referenceId: storedRecord.id,
         mode: 'production'
       };
     } catch (err) {
@@ -61,7 +65,7 @@ export async function submitContactInquiry(formData) {
 
   return {
     success: true,
-    referenceId: `ARK-DEV-${Math.floor(100000 + Math.random() * 900000)}`,
+    referenceId: storedRecord.id,
     mode: 'development-simulation',
     message: 'Transmission logged successfully in development sandbox.'
   };

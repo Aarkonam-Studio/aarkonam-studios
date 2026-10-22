@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import SectionHeader from '../components/SectionHeader';
 import TeamCard from '../components/TeamCard';
-import { teamMembers, studioDivisions } from '../data/team';
+import { studioDivisions } from '../data/team';
+import { store, subscribeToStore } from '../services/storeService';
 import { Link } from '../context/RouterContext';
 
 export default function Team() {
+  const [team, setTeam] = useState(() => store.getPublishedTeam());
+
+  useEffect(() => {
+    const unsub = subscribeToStore(() => {
+      setTeam(store.getPublishedTeam());
+    });
+    return () => unsub();
+  }, []);
+
   return (
     <div className="page-container">
       <Navigation />
@@ -25,7 +35,7 @@ export default function Team() {
           {/* Founders Grid */}
           <section className="founders-section" aria-label="Executive Founders">
             <div className="team-grid">
-              {teamMembers.map((member) => (
+              {team.map((member) => (
                 <TeamCard key={member.id} member={member} />
               ))}
             </div>

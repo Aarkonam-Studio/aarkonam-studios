@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import SectionHeader from '../components/SectionHeader';
 import GameCard from '../components/GameCard';
 import GameModal from '../components/GameModal';
-import { gamesData } from '../data/games';
+import { store, subscribeToStore } from '../services/storeService';
 import { Link } from '../context/RouterContext';
 
 export default function Games() {
   const [selectedGame, setSelectedGame] = useState(null);
+  const [games, setGames] = useState(() => store.getPublishedGames());
+
+  useEffect(() => {
+    const unsub = subscribeToStore(() => {
+      setGames(store.getPublishedGames());
+    });
+    return () => unsub();
+  }, []);
 
   // Featured flagship game
-  const featuredGame = gamesData[0];
-  const regularGames = gamesData.slice(1);
+  const featuredGame = games.find((g) => g.featured) || games[0];
 
   return (
     <div className="page-container">
@@ -60,7 +67,7 @@ export default function Games() {
                     </div>
                     <div className="meta-block">
                       <span className="meta-label hud-font">PLATFORMS</span>
-                      <span className="meta-value">{featuredGame.platforms.join(' · ')}</span>
+                      <span className="meta-value">{featuredGame.platforms?.join(' · ') || 'PC'}</span>
                     </div>
                   </div>
 
@@ -86,12 +93,12 @@ export default function Games() {
             <div className="archive-header-row">
               <h3 className="archive-title hud-font">DEVELOPMENT ARCHIVE</h3>
               <span className="archive-count hud-font">
-                0{gamesData.length} PROPERTIES REGISTERED
+                0{games.length} PROPERTIES REGISTERED
               </span>
             </div>
 
             <div className="game-grid">
-              {gamesData.map((game) => (
+              {games.map((game) => (
                 <GameCard
                   key={game.id}
                   game={game}

@@ -1,0 +1,44 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isEditor() {
+      return isSignedIn() && (
+        request.auth.token.role in ['owner', 'admin', 'editor'] ||
+        request.auth.token.admin == true
+      );
+    }
+    
+    function isOwner() {
+      return isSignedIn() && (
+        request.auth.token.role == 'owner' ||
+        request.auth.token.admin == true
+      );
+    }
+
+    // Media library assets
+    match /media/{allPaths=**} {
+      // Public read access for studio visual assets
+      allow read: if true;
+      
+      // Editors can upload valid media (Images under 15MB, Videos under 50MB)
+      allow create, update: if isEditor() &&
+        (
+          (request.resource.contentType.matches('image/(png|jpeg|webp|svg\\+xml)') && request.resource.size < 15 * 1024 * 1024) ||
+          (request.resource.contentType.matches('video/(mp4|webm)') && request.resource.size < 50 * 1024 * 1024)
+        );
+      
+      // Deletions require Admin or Owner permissions
+      allow delete: if isEditor();
+    }
+
+    // Default deny for unclassified storage objects
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for Role-Based Access Control (RBAC)
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return request.auth.token.role != null ? request.auth.token.role : 
+        get(/databases/$(database)/documents/adminRoles/$(request.auth.uid)).data.role;
+    }
+    
+    function isOwner() {
+      return isSignedIn() && (getUserRole() == 'owner' || request.auth.token.admin == true);
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (isOwner() || getUserRole() == 'admin');
+    }
+    
+    function isEditor() {
+      return isSignedIn() && (isAdmin() || getUserRole() == 'editor');
+    }
+    
+    function isViewer() {
+      return isSignedIn() && (isEditor() || getUserRole() == 'viewer');
+    }
+
+    // Public Published Content Collections (Games, Projects, Team, Announcements)
+    match /games/{gameId} {
+      allow read: if resource.data.published == true || isViewer();
+      allow write: if isEditor();
+    }
+    
+    match /projects/{projectId} {
+      allow read: if resource.data.published == true || isViewer();
+      allow write: if isEditor();
+    }
+    
+    match /teamMembers/{memberId} {
+      allow read: if resource.data.published == true || isViewer();
+      allow write: if isAdmin();
+    }
+    
+    match /announcements/{annId} {
+      allow read: if resource.data.published == true || isViewer();
+      allow write: if isAdmin();
+    }
+    
+    // Site-wide Singletons (Homepage, Contact Details, SEO)
+    match /siteSettings/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Private Contact & Project Enquiries
+    match /enquiries/{enquiryId} {
+      // Public visitors can submit an inquiry with required schema
+      allow create: if request.resource.data.name is string &&
+                       request.resource.data.email is string &&
+                       request.resource.data.message is string &&
+                       request.resource.data.name.size() > 0 &&
+                       request.resource.data.email.size() > 0 &&
+                       request.resource.data.message.size() >= 15;
+      
+      // Strict privacy: Only authenticated Admins and Owners can list, read, update, or delete
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Admin Users and Role Hierarchy
+    match /adminRoles/{userId} {
+      allow read: if isViewer();
+      allow write: if isOwner(); // Only Owner can grant or modify admin privileges
+    }
+
+    // Audit Trail
+    match /auditLogs/{logId} {
+      allow read: if isOwner();
+      allow create: if isSignedIn();
+      allow update, delete: if false; // Immutable audit trail
+    }
+
+    // Fallback: Block all unspecified paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

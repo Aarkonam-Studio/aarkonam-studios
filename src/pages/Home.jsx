@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from '../context/RouterContext';
+import { store, subscribeToStore } from '../services/storeService';
 import '../styles/home.css';
 
 export default function Home() {
@@ -8,6 +9,8 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [clockTime, setClockTime] = useState('--:--');
   const [currentDate, setCurrentDate] = useState('---');
+  const [homepage, setHomepage] = useState(() => store.getHomepage());
+  const [announcement, setAnnouncement] = useState(() => store.getActiveAnnouncement());
 
   const menuItems = [
     { number: '01', label: 'STUDIO', path: '/studio' },
@@ -16,6 +19,15 @@ export default function Home() {
     { number: '04', label: 'TEAM', path: '/team' },
     { number: '05', label: 'CONTACT', path: '/contact' }
   ];
+
+  // Store subscription
+  useEffect(() => {
+    const unsub = subscribeToStore(() => {
+      setHomepage(store.getHomepage());
+      setAnnouncement(store.getActiveAnnouncement());
+    });
+    return () => unsub();
+  }, []);
 
   // Digital clock & date updates
   useEffect(() => {
@@ -79,7 +91,13 @@ export default function Home() {
   return (
     <main className="game-menu-screen" role="region" aria-label="Aarkonam Studios Main Terminal">
       {/* Background Layers */}
-      <div className="game-scene" aria-hidden="true" />
+      <div
+        className="game-scene"
+        style={{
+          backgroundImage: `url('${homepage.backgroundImage || '/images/home-background.png'}')`
+        }}
+        aria-hidden="true"
+      />
       <div className="game-shade" aria-hidden="true" />
       <div className="ambient-grain" aria-hidden="true" />
 
@@ -93,11 +111,34 @@ export default function Home() {
           />
         </a>
 
+        {/* Sitewide Announcement Pill if Active */}
+        {announcement && (
+          <div
+            style={{
+              padding: '6px 14px',
+              background: 'rgba(6, 59, 44, 0.4)',
+              border: '1px solid var(--border-emerald)',
+              borderRadius: '2px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <span className="status-ping" style={{ width: '5px', height: '5px' }} />
+            <span className="hud-font emerald-accent" style={{ fontSize: '0.6875rem' }}>
+              DIRECTIVE:
+            </span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--silver)' }}>
+              {announcement.message}
+            </span>
+          </div>
+        )}
+
         <div className="home-status-widget" aria-label="System status telemetry">
           <div className="home-clock hud-font">{clockTime}</div>
           <div className="home-status-label hud-font">
             <span className="status-ping" aria-hidden="true" />
-            <span>SYSTEM ONLINE</span>
+            <span>SYSTEM {homepage.radarStatus || 'ONLINE'}</span>
           </div>
           <p className="home-date hud-font">{currentDate}</p>
         </div>
@@ -129,25 +170,25 @@ export default function Home() {
       <section className="home-hero-center" aria-labelledby="home-hero-title">
         <div className="home-eyebrow">
           <span className="home-eyebrow-line" />
-          <span>INDEPENDENT CREATIVE STUDIO</span>
+          <span>{homepage.heroEyebrow || 'INDEPENDENT CREATIVE STUDIO'}</span>
           <span className="home-eyebrow-line" />
         </div>
 
         <h1 id="home-hero-title" className="home-title">
-          AARKONAM
+          {homepage.heroTitle || 'AARKONAM'}
         </h1>
-        <p className="home-studios-sub">S T U D I O S</p>
+        <p className="home-studios-sub">{homepage.heroSubtitle || 'S T U D I O S'}</p>
 
         <div className="home-diamond-rule" aria-hidden="true">
           <span className="home-diamond-rule-gem" />
         </div>
 
         <p className="home-tagline">
-          BUILDING WORLDS<br />BEYOND THE SCREEN
+          {homepage.heroTagline || 'BUILDING WORLDS\nBEYOND THE SCREEN'}
         </p>
 
         <p className="home-subnote">
-          GAMES · SOFTWARE · EXPERIMENTAL TECHNOLOGY
+          {homepage.heroSubnote || 'GAMES · SOFTWARE · EXPERIMENTAL TECHNOLOGY'}
         </p>
       </section>
 
@@ -164,7 +205,7 @@ export default function Home() {
         <div className="network-details">
           <p>AARKONAM NETWORK</p>
           <small>TERMINAL ROOT</small>
-          <small className="coords hud-font">18.5204° N &nbsp;73.8567° E</small>
+          <small className="coords hud-font">{homepage.radarCoordinates || '18.5204° N  73.8567° E'}</small>
         </div>
       </aside>
 

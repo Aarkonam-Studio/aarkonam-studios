@@ -1,21 +1,30 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import SectionHeader from '../components/SectionHeader';
 import ProjectCard from '../components/ProjectCard';
-import { projectsData, projectCategories } from '../data/projects';
+import { projectCategories } from '../data/projects';
+import { store, subscribeToStore } from '../services/storeService';
 import { Link } from '../context/RouterContext';
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState('ALL');
+  const [projects, setProjects] = useState(() => store.getPublishedProjects());
+
+  useEffect(() => {
+    const unsub = subscribeToStore(() => {
+      setProjects(store.getPublishedProjects());
+    });
+    return () => unsub();
+  }, []);
 
   // Real functional filtering
   const filteredProjects = useMemo(() => {
-    if (activeCategory === 'ALL') return projectsData;
-    return projectsData.filter((p) => p.category === activeCategory);
-  }, [activeCategory]);
+    if (activeCategory === 'ALL') return projects;
+    return projects.filter((p) => p.category === activeCategory);
+  }, [projects, activeCategory]);
 
-  const featuredProject = projectsData[0];
+  const featuredProject = projects.find((p) => p.featured) || projects[0];
 
   return (
     <div className="page-container">
@@ -32,7 +41,7 @@ export default function Projects() {
             subtitle="Architectural frameworks, autonomous agent heuristics, and real-time graphics pipelines forged inside the Aarkonam engineering pipeline."
           />
 
-          {/* Featured Technology Showcase: World Engine */}
+          {/* Featured Technology Showcase */}
           {featuredProject && (
             <section className="featured-project-panel" aria-labelledby="featured-project-heading">
               <div className="featured-project-backdrop">
@@ -63,14 +72,14 @@ export default function Projects() {
                   </div>
                   <div className="spec-item">
                     <span className="spec-label hud-font">CORE ARCHITECTURE</span>
-                    <span className="spec-value">{featuredProject.techStack.join(' · ')}</span>
+                    <span className="spec-value">{featuredProject.techStack?.join(' · ')}</span>
                   </div>
                 </div>
 
                 <div className="featured-project-features">
                   <h4 className="hud-font features-subheading">CAPABILITY DISCLOSURE</h4>
                   <ul className="capability-list">
-                    {featuredProject.features.map((feat, idx) => (
+                    {featuredProject.features?.map((feat, idx) => (
                       <li key={idx}>
                         <span className="cap-mark">◆</span>
                         <span>{feat}</span>
@@ -82,7 +91,7 @@ export default function Projects() {
             </section>
           )}
 
-          {/* Category Filter Tabs (Fully functional) */}
+          {/* Category Filter Tabs */}
           <div className="project-categories-bar" role="tablist" aria-label="Project Categories">
             {projectCategories.map((cat) => {
               const isSelected = activeCategory === cat;
