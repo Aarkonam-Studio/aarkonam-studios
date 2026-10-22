@@ -1,0 +1,228 @@
+/* ==========================================================================
+   FOOTER STYLING (EMERALD NOIR)
+   ========================================================================== */
+
+.site-footer {
+  position: relative;
+  background: linear-gradient(180deg, transparent 0%, rgba(7, 18, 15, 0.95) 15%, var(--void-black) 100%);
+  border-top: 1px solid var(--border-emerald);
+  padding-top: 4rem;
+  padding-bottom: 2.5rem;
+  z-index: 10;
+  margin-top: auto;
+}
+
+.footer-top-rule {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--emerald-cyan), transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rule-diamond {
+  width: 7px;
+  height: 7px;
+  background: var(--emerald-cyan);
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px var(--emerald-cyan);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1.2fr 1.4fr;
+  gap: 3.5rem;
+  margin-bottom: 4rem;
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-logo-link {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+}
+
+.footer-wordmark {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-tagline {
+  font-family: var(--font-hud);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: var(--antique-gold);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.footer-bio {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 380px;
+}
+
+.footer-hud-seal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(6, 59, 44, 0.2);
+  border: 1px solid var(--border-emerald);
+  border-radius: 2px;
+  width: fit-content;
+}
+
+.footer-emblem-badge {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.seal-text span {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--silver);
+  letter-spacing: 0.14em;
+}
+
+.seal-text small {
+  display: block;
+  font-size: 0.5625rem;
+  color: var(--antique-gold);
+  letter-spacing: 0.1em;
+}
+
+.footer-heading {
+  font-size: 0.8125rem;
+  letter-spacing: 0.22em;
+  color: var(--silver);
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 28px;
+  height: 1px;
+  background: var(--emerald-cyan);
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links a {
+  font-size: 0.8125rem;
+  color: var(--muted-text);
+  letter-spacing: 0.04em;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  display: inline-block;
+}
+
+.footer-links a:hover {
+  color: var(--emerald-cyan);
+  transform: translateX(4px);
+}
+
+.telemetry-box {
+  background: rgba(7, 18, 15, 0.7);
+  border: 1px solid rgba(199, 205, 209, 0.1);
+  padding: 1rem;
+  border-radius: 2px;
+  margin-bottom: 1.25rem;
+}
+
+.telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  font-size: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.telemetry-row:last-child {
+  border-bottom: none;
+}
+
+.telemetry-label {
+  color: var(--muted-text);
+  font-family: var(--font-hud);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+}
+
+.telemetry-val {
+  color: var(--silver);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-cta-btn {
+  width: 100%;
+  font-size: 0.6875rem;
+  padding: 0.625rem 1rem;
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(199, 205, 209, 0.08);
+  font-size: 0.75rem;
+  color: var(--muted-text);
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  color: var(--silver);
+}
+
+.meta-separator {
+  color: var(--antique-gold);
+}
+
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}

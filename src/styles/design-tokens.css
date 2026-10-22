@@ -1,0 +1,57 @@
+:root {
+  /* ==========================================================================
+     EMERALD NOIR DESIGN SYSTEM TOKENS
+     ========================================================================== */
+  
+  /* Atmosphere & Foundations */
+  --void-black: #050706;
+  --deep-black-green: #07120F;
+  --dark-emerald: #063B2C;
+  --emerald: #087F5B;
+  --bright-emerald: #10B981;
+  --emerald-cyan: #00E5BD;
+  
+  /* Premium Gold Accents (Restrained) */
+  --antique-gold: #C6A15B;
+  --highlight-gold: #E5C76B;
+  --gold-faint: rgba(198, 161, 91, 0.15);
+  
+  /* Technical UI, Silver & Typography */
+  --silver: #C7CDD1;
+  --steel-grey: #7E878C;
+  --muted-text: #9AA6A1;
+  --text-primary: #F0F5F2;
+  --text-secondary: #C7CDD1;
+  --text-dim: #7E878C;
+  
+  /* Interactive Surfaces */
+  --surface-void: rgba(5, 7, 6, 0.88);
+  --surface-panel: rgba(7, 18, 15, 0.78);
+  --surface-glass: rgba(6, 59, 44, 0.22);
+  --surface-active: rgba(16, 185, 129, 0.12);
+  
+  /* Borders & Grid Rules */
+  --border-faint: rgba(199, 205, 209, 0.12);
+  --border-emerald: rgba(16, 185, 129, 0.25);
+  --border-emerald-glow: rgba(0, 229, 189, 0.6);
+  --border-gold: rgba(198, 161, 91, 0.35);
+  
+  /* Typography Families */
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Cinzel', Georgia, serif;
+  --font-hud: 'Orbitron', -apple-system, monospace;
+
+  /* Elevations & Glows */
+  --glow-emerald: 0 0 16px rgba(0, 229, 189, 0.3);
+  --glow-emerald-subtle: 0 0 8px rgba(16, 185, 129, 0.2);
+  --glow-gold: 0 0 14px rgba(229, 199, 107, 0.35);
+
+  /* Transitions */
+  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --header-height: 80px;
+  --max-width: 1360px;
+}

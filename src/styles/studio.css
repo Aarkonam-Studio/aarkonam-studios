@@ -1,0 +1,303 @@
+/* ==========================================================================
+   STUDIO PAGE STYLING (EMERALD NOIR)
+   ========================================================================== */
+
+.studio-hero-section {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 5rem;
+  margin-top: calc(-1 * var(--header-height));
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-emerald);
+}
+
+.studio-hero-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.studio-hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.02);
+}
+
+.studio-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(180deg, rgba(5, 7, 6, 0.6) 0%, rgba(5, 7, 6, 0.8) 55%, var(--void-black) 100%),
+    radial-gradient(circle at 75% 40%, rgba(0, 229, 189, 0.12), transparent 60%);
+}
+
+.studio-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 860px;
+}
+
+.studio-hero-badge {
+  margin-bottom: 1.25rem;
+}
+
+.studio-hero-title {
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  letter-spacing: 0.16em;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.studio-hero-lead {
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  color: var(--silver);
+  line-height: 1.7;
+}
+
+/* Narrative Section */
+.studio-narrative-section {
+  padding: 6rem 0;
+}
+
+.narrative-split-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.narrative-quote-block {
+  margin-top: 2rem;
+  padding: 1.75rem 2rem;
+  background: rgba(6, 59, 44, 0.15);
+  border-left: 2px solid var(--antique-gold);
+  border-radius: 2px;
+}
+
+.narrative-quote-block p {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text-primary);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.narrative-quote-block cite {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  color: var(--antique-gold);
+}
+
+.telemetry-stat-card {
+  background: var(--surface-panel);
+  border: 1px solid var(--border-emerald);
+  padding: 2.5rem;
+  border-radius: 2px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-faint);
+  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: var(--silver);
+}
+
+.stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid rgba(199, 205, 209, 0.06);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  color: var(--muted-text);
+}
+
+.stat-value {
+  font-size: 0.9375rem;
+  color: var(--silver);
+}
+
+/* Pillars Section */
+.studio-pillars-section {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, var(--void-black) 0%, rgba(7, 18, 15, 0.75) 50%, var(--void-black) 100%);
+  border-top: 1px solid var(--border-faint);
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.pillar-card {
+  position: relative;
+  background: var(--surface-panel);
+  border: 1px solid var(--border-emerald);
+  padding: 2.25rem 2rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--emerald-cyan);
+}
+
+.pillar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.pillar-num {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--antique-gold);
+}
+
+.pillar-title {
+  font-size: 1.1875rem;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  margin-bottom: 0.875rem;
+}
+
+.pillar-desc {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.pillar-border-accent {
+  margin-top: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-emerald), transparent);
+}
+
+/* Principles */
+.studio-principles-section {
+  padding: 6rem 0;
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.principle-card {
+  background: rgba(6, 59, 44, 0.15);
+  border: 1px solid var(--border-emerald);
+  padding: 2.25rem 2rem;
+  border-radius: 2px;
+}
+
+.principle-index {
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  color: var(--antique-gold);
+  margin-bottom: 0.75rem;
+}
+
+.principle-title {
+  font-size: 1.25rem;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.principle-summary {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  line-height: 1.6;
+}
+
+/* Portals Cross-link Banner */
+.studio-portals-section {
+  padding: 4rem 0 6rem;
+}
+
+.portals-banner {
+  background: var(--surface-panel);
+  border: 1px solid var(--border-emerald);
+  padding: 3.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  border-radius: 2px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+.portal-separator {
+  width: 1px;
+  height: 100%;
+  min-height: 140px;
+  background: linear-gradient(180deg, transparent, var(--border-emerald), transparent);
+}
+
+.portal-num {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  color: var(--antique-gold);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.portal-heading {
+  font-size: 1.5rem;
+  letter-spacing: 0.14em;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.portal-desc {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 440px;
+}
+
+@media (max-width: 900px) {
+  .narrative-split-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .portals-banner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding: 2.5rem 1.5rem;
+  }
+  .portal-separator {
+    width: 100%;
+    height: 1px;
+    min-height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-emerald), transparent);
+  }
+}
