@@ -132,6 +132,7 @@ export default function AdminEnquiries() {
               <th>CLASSIFICATION</th>
               <th>BUDGET</th>
               <th>DATE</th>
+              <th>EMAIL RELAY</th>
               <th>STATUS</th>
               <th>ACTIONS</th>
             </tr>
@@ -139,7 +140,7 @@ export default function AdminEnquiries() {
           <tbody>
             {filteredEnquiries.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ textAlign: 'center', color: 'var(--muted-text)', padding: '3rem' }}>
+                <td colSpan="8" style={{ textAlign: 'center', color: 'var(--muted-text)', padding: '3rem' }}>
                   No transmission records matching current filter.
                 </td>
               </tr>
@@ -159,6 +160,33 @@ export default function AdminEnquiries() {
                   </td>
                   <td style={{ fontSize: '0.75rem', color: 'var(--muted-text)' }}>
                     {new Date(enq.timestamp).toLocaleDateString()}
+                  </td>
+                  <td>
+                    {enq.emailStatus === 'sent' ? (
+                      <span className="hud-tag active" title="Email delivered to studio inbox">
+                        DELIVERED
+                      </span>
+                    ) : enq.emailStatus === 'delivery-failed' ? (
+                      <span
+                        className="hud-tag"
+                        style={{ borderColor: '#ef4444', color: '#ef4444' }}
+                        title={enq.emailMetadata?.error || 'Email delivery failed'}
+                      >
+                        FAILED
+                      </span>
+                    ) : enq.emailStatus === 'endpoint-forwarded' ? (
+                      <span className="hud-tag active" title="Forwarded via webhook">
+                        FORWARDED
+                      </span>
+                    ) : enq.emailStatus === 'sandbox-pending-emailjs' ? (
+                      <span className="hud-tag gold" title="Saved locally; EmailJS keys not configured in environment">
+                        SANDBOX
+                      </span>
+                    ) : (
+                      <span className="hud-tag" style={{ color: 'var(--muted-text)' }}>
+                        {enq.emailStatus?.toUpperCase() || 'STORED'}
+                      </span>
+                    )}
                   </td>
                   <td>
                     <span className={`hud-tag ${enq.status === 'new' ? 'gold' : 'active'}`}>
@@ -278,6 +306,34 @@ export default function AdminEnquiries() {
                 <div className="spec-row">
                   <span className="spec-label">REGISTERED AT</span>
                   <span className="spec-val">{new Date(selectedEnquiry.timestamp).toLocaleString()}</span>
+                </div>
+
+                <div className="spec-row">
+                  <span className="spec-label">EMAIL RELAY</span>
+                  <span className="spec-val">
+                    {selectedEnquiry.emailStatus === 'sent' && (
+                      <span className="emerald-accent">✔ Delivered via EmailJS</span>
+                    )}
+                    {selectedEnquiry.emailStatus === 'delivery-failed' && (
+                      <span style={{ color: '#ef4444' }}>
+                        ⚠ Delivery Failed {selectedEnquiry.emailMetadata?.error ? `(${selectedEnquiry.emailMetadata.error})` : ''}
+                      </span>
+                    )}
+                    {selectedEnquiry.emailStatus === 'sandbox-pending-emailjs' && (
+                      <span className="gold-accent">Sandbox (EmailJS unconfigured)</span>
+                    )}
+                    {selectedEnquiry.emailStatus === 'endpoint-forwarded' && (
+                      <span className="emerald-accent">Forwarded to Webhook</span>
+                    )}
+                    {!['sent', 'delivery-failed', 'sandbox-pending-emailjs', 'endpoint-forwarded'].includes(selectedEnquiry.emailStatus) && (
+                      <span>{selectedEnquiry.emailStatus || 'Stored locally'}</span>
+                    )}
+                  </span>
+                </div>
+
+                <div className="spec-row">
+                  <span className="spec-label">ORIGIN CHANNEL</span>
+                  <span className="spec-val">{selectedEnquiry.clientOrigin || 'direct'}</span>
                 </div>
 
                 <div style={{ marginTop: '1.5rem' }}>

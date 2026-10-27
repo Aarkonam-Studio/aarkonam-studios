@@ -415,6 +415,18 @@ export const store = {
     this.logAudit('ENQUIRY_RECEIVED', 'ENQUIRY', newRecord.id, `Inquiry from ${newRecord.name} (${newRecord.email})`);
     return newRecord;
   },
+  updateEnquiryEmailStatus(id, emailStatus, emailMetadata = null) {
+    const enquiries = this.getEnquiries();
+    const target = enquiries.find((e) => e.id === id);
+    if (!target) return null;
+    target.emailStatus = emailStatus;
+    if (emailMetadata) {
+      target.emailMetadata = emailMetadata;
+    }
+    target.updatedAt = new Date().toISOString();
+    setStored('enquiries', enquiries);
+    return target;
+  },
   updateEnquiryStatus(id, status, newNote) {
     const enquiries = this.getEnquiries();
     const target = enquiries.find((e) => e.id === id);
