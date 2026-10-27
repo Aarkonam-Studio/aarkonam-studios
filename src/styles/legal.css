@@ -1,0 +1,342 @@
+/* ==========================================================================
+   AARKONAM STUDIOS — LEGAL & COMPLIANCE STYLES (EMERALD NOIR)
+   ========================================================================== */
+
+.legal-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--void-black);
+  color: var(--text-primary);
+  position: relative;
+}
+
+.legal-content-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 8rem 2rem 5rem 2rem;
+  width: 100%;
+}
+
+/* Page Header */
+.legal-header {
+  border-bottom: 1px solid var(--border-emerald);
+  padding-bottom: 2.5rem;
+  margin-bottom: 3.5rem;
+  position: relative;
+}
+
+.legal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--border-emerald);
+  border-radius: 2px;
+  font-family: var(--font-hud);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  color: var(--emerald-cyan);
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+}
+
+.legal-title {
+  font-family: var(--font-heading);
+  font-size: 2.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.legal-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted-text);
+  margin-bottom: 1.5rem;
+}
+
+.legal-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legal-meta-label {
+  font-family: var(--font-hud);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  color: var(--antique-gold);
+}
+
+.legal-intro {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--silver);
+  max-width: 880px;
+  margin-top: 1rem;
+}
+
+/* Quick Navigation Anchor Bar */
+.legal-toc {
+  background: rgba(7, 18, 15, 0.85);
+  border: 1px solid var(--border-faint);
+  border-left: 3px solid var(--emerald-cyan);
+  padding: 1.5rem 1.75rem;
+  border-radius: 2px;
+  margin-bottom: 3.5rem;
+}
+
+.legal-toc-title {
+  font-family: var(--font-hud);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--antique-gold);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.legal-toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legal-toc-grid a {
+  font-size: 0.8125rem;
+  color: var(--silver);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.legal-toc-grid a:hover {
+  color: var(--emerald-cyan);
+  transform: translateX(3px);
+}
+
+.legal-toc-num {
+  font-family: var(--font-hud);
+  font-size: 0.6875rem;
+  color: var(--antique-gold);
+}
+
+/* Legal Body Sections */
+.legal-section {
+  margin-bottom: 3.5rem;
+  scroll-margin-top: 6rem;
+}
+
+.legal-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid rgba(199, 205, 209, 0.1);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.legal-section-num {
+  font-family: var(--font-hud);
+  font-size: 0.875rem;
+  letter-spacing: 0.14em;
+  color: var(--emerald-cyan);
+}
+
+.legal-section-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.legal-section p {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--silver);
+  margin-bottom: 1.25rem;
+}
+
+.legal-section p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section strong {
+  color: var(--text-primary);
+}
+
+.legal-section ul,
+.legal-section ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--silver);
+  font-size: 0.9375rem;
+  line-height: 1.8;
+}
+
+.legal-section li {
+  margin-bottom: 0.5rem;
+}
+
+.legal-section li::marker {
+  color: var(--emerald-cyan);
+}
+
+/* Callout Boxes */
+.legal-callout {
+  background: rgba(6, 59, 44, 0.2);
+  border: 1px solid var(--border-emerald);
+  border-left: 4px solid var(--emerald-cyan);
+  padding: 1.25rem 1.5rem;
+  border-radius: 2px;
+  margin: 1.75rem 0;
+}
+
+.legal-callout-title {
+  font-family: var(--font-hud);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: var(--emerald-cyan);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legal-callout p {
+  color: var(--silver);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.legal-alert {
+  background: rgba(198, 161, 91, 0.08);
+  border: 1px solid var(--border-gold);
+  border-left: 4px solid var(--antique-gold);
+  padding: 1.25rem 1.5rem;
+  border-radius: 2px;
+  margin: 1.75rem 0;
+}
+
+.legal-alert-title {
+  font-family: var(--font-hud);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: var(--highlight-gold);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.legal-alert p {
+  color: var(--silver);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Compliance Matrices & Tables */
+.legal-table-wrapper {
+  overflow-x: auto;
+  margin: 2rem 0;
+  border: 1px solid var(--border-emerald);
+  border-radius: 2px;
+  background: rgba(7, 18, 15, 0.6);
+}
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+.legal-table th {
+  background: rgba(6, 59, 44, 0.4);
+  font-family: var(--font-hud);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  color: var(--antique-gold);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-emerald);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.legal-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(199, 205, 209, 0.08);
+  color: var(--silver);
+  line-height: 1.6;
+  vertical-align: top;
+}
+
+.legal-table tr:last-child td {
+  border-bottom: none;
+}
+
+.legal-table tr:hover td {
+  background: rgba(16, 185, 129, 0.04);
+}
+
+/* Contact Officer Card */
+.officer-card {
+  background: rgba(7, 18, 15, 0.9);
+  border: 1px solid var(--border-emerald);
+  padding: 1.75rem;
+  border-radius: 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.officer-field-label {
+  font-family: var(--font-hud);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  color: var(--antique-gold);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.officer-field-val {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.officer-field-val a {
+  color: var(--emerald-cyan);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .legal-content-wrapper {
+    padding: 6.5rem 1.25rem 3.5rem 1.25rem;
+  }
+
+  .legal-title {
+    font-size: 2rem;
+  }
+
+  .legal-section-title {
+    font-size: 1.25rem;
+  }
+
+  .officer-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

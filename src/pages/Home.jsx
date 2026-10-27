@@ -89,7 +89,7 @@ export default function Home() {
   }, [activeIndex, handleSelect, handleActivate]);
 
   return (
-    <main className="game-menu-screen" role="region" aria-label="Aarkonam Studios Main Terminal">
+    <main id="main-content" className="game-menu-screen" role="region" aria-label="Aarkonam Studios Main Terminal" tabIndex="-1">
       {/* Background Layers */}
       <div
         className="game-scene"

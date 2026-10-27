@@ -1,10 +1,10 @@
-export const projectCategories = ['ALL', 'ENGINE & TOOLS', 'AI / AUTOMATION', 'SYSTEMS & SOFTWARE'];
+export const projectCategories = ['ALL', 'Web Development', 'AI / AUTOMATION', 'SYSTEMS & SOFTWARE'];
 
 export const projectsData = [
   {
     id: 'aarkonam-world-engine',
     title: 'Aarkonam World Engine',
-    category: 'ENGINE & TOOLS',
+    category: 'Web Development',
     status: 'In Active Development',
     statusType: 'active',
     image: '/images/game-neo-aarkonam-dusk.jpg',
@@ -42,7 +42,7 @@ export const projectsData = [
   {
     id: 'chronos-volumetric-pipeline',
     title: 'Chronos Atmospheric Lighting',
-    category: 'ENGINE & TOOLS',
+    category: 'Web Development',
     status: 'Production Ready',
     statusType: 'production',
     image: '/images/game-gothic-citadel.jpg',

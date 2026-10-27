@@ -73,11 +73,18 @@ export default function AdminEnquiries() {
 
   const confirmDelete = () => {
     if (!deleteCandidate) return;
+    store.logAudit(
+      'DATA_SUBJECT_ERASURE',
+      'COMPLIANCE',
+      deleteCandidate.id,
+      `Transmission record ${deleteCandidate.id} for ${deleteCandidate.email} permanently purged pursuant to privacy compliance protocol.`,
+      user?.name
+    );
     store.deleteEnquiry(deleteCandidate.id);
     if (selectedEnquiry?.id === deleteCandidate.id) {
       setSelectedEnquiry(null);
     }
-    showToast(`Transmission ${deleteCandidate.id} purged.`);
+    showToast(`Transmission ${deleteCandidate.id} permanently purged under privacy protocol.`);
     setDeleteCandidate(null);
   };
 
@@ -154,7 +161,14 @@ export default function AdminEnquiries() {
                       {enq.organization ? `${enq.organization} · ` : ''}{enq.email}
                     </span>
                   </td>
-                  <td style={{ fontSize: '0.8125rem' }}>{enq.inquiryType}</td>
+                  <td style={{ fontSize: '0.8125rem' }}>
+                    {enq.inquiryType}
+                    {(enq.inquiryType?.includes('Privacy') || enq.inquiryType?.includes('Erasure')) && (
+                      <span className="hud-tag gold" style={{ display: 'inline-block', marginLeft: '6px', fontSize: '0.625rem' }}>
+                        GDPR / 30D SLA
+                      </span>
+                    )}
+                  </td>
                   <td className="hud-font gold-accent" style={{ fontSize: '0.75rem' }}>
                     {enq.budgetRange}
                   </td>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { RouterProvider, useRouter } from './context/RouterContext';
 import { AdminAuthProvider } from './admin/context/AdminAuthContext';
+import AdminProtectedRoute from './admin/components/AdminProtectedRoute';
+import CookieConsent from './components/CookieConsent';
 
 // Public Pages
 import Home from './pages/Home';
@@ -10,6 +12,12 @@ import Projects from './pages/Projects';
 import Team from './pages/Team';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+
+// Legal & Compliance Pages
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
+import RefundPolicy from './pages/RefundPolicy';
 
 // Admin Pages
 import AdminLogin from './admin/pages/AdminLogin';
@@ -26,7 +34,7 @@ import AdminAnnouncements from './admin/pages/AdminAnnouncements';
 import AdminUsers from './admin/pages/AdminUsers';
 import AdminSettings from './admin/pages/AdminSettings';
 
-// Public Styles
+// Public & Security Styles
 import './styles/design-tokens.css';
 import './styles/global.css';
 import './styles/navigation.css';
@@ -37,6 +45,8 @@ import './styles/games.css';
 import './styles/projects.css';
 import './styles/team.css';
 import './styles/contact.css';
+import './styles/legal.css';
+import './styles/cookie-consent.css';
 
 function AppRoutes() {
   const { currentPath } = useRouter();
@@ -65,33 +75,91 @@ function AppRoutes() {
     case '/contact':
       return <Contact />;
 
-    // Admin Routes
+    // Legal & Compliance Routes
+    case '/privacy':
+      return <PrivacyPolicy />;
+    case '/terms':
+      return <TermsOfService />;
+    case '/cookies':
+      return <CookiePolicy />;
+    case '/refund':
+      return <RefundPolicy />;
+
+    // Admin Routes (Guarded by cryptographic auth & RBAC permissions)
     case '/admin/login':
       return <AdminLogin />;
     case '/admin':
-      return <AdminDashboard />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_dashboard" moduleName="DASHBOARD">
+          <AdminDashboard />
+        </AdminProtectedRoute>
+      );
     case '/admin/games':
-      return <AdminGames />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_content" moduleName="GAMES MANAGEMENT">
+          <AdminGames />
+        </AdminProtectedRoute>
+      );
     case '/admin/projects':
-      return <AdminProjects />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_content" moduleName="PROJECTS MANAGEMENT">
+          <AdminProjects />
+        </AdminProtectedRoute>
+      );
     case '/admin/homepage':
-      return <AdminHomepage />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_content" moduleName="HOMEPAGE TERMINAL">
+          <AdminHomepage />
+        </AdminProtectedRoute>
+      );
     case '/admin/team':
-      return <AdminTeam />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_content" moduleName="TEAM MANAGEMENT">
+          <AdminTeam />
+        </AdminProtectedRoute>
+      );
     case '/admin/enquiries':
-      return <AdminEnquiries />;
+      return (
+        <AdminProtectedRoute requiredPermission="manage_enquiries" moduleName="TRANSMISSIONS & ENQUIRIES">
+          <AdminEnquiries />
+        </AdminProtectedRoute>
+      );
     case '/admin/media':
-      return <AdminMedia />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_content" moduleName="MEDIA LIBRARY">
+          <AdminMedia />
+        </AdminProtectedRoute>
+      );
     case '/admin/contact':
-      return <AdminContact />;
+      return (
+        <AdminProtectedRoute requiredPermission="manage_contact" moduleName="CONTACT DIRECTIVES">
+          <AdminContact />
+        </AdminProtectedRoute>
+      );
     case '/admin/seo':
-      return <AdminSEO />;
+      return (
+        <AdminProtectedRoute requiredPermission="manage_seo" moduleName="SEO DIRECTIVES">
+          <AdminSEO />
+        </AdminProtectedRoute>
+      );
     case '/admin/announcements':
-      return <AdminAnnouncements />;
+      return (
+        <AdminProtectedRoute requiredPermission="manage_announcements" moduleName="ANNOUNCEMENT RELAY">
+          <AdminAnnouncements />
+        </AdminProtectedRoute>
+      );
     case '/admin/users':
-      return <AdminUsers />;
+      return (
+        <AdminProtectedRoute requiredPermission="manage_users" moduleName="OPERATOR ACCESS & ROLES">
+          <AdminUsers />
+        </AdminProtectedRoute>
+      );
     case '/admin/settings':
-      return <AdminSettings />;
+      return (
+        <AdminProtectedRoute requiredPermission="view_dashboard" moduleName="SYSTEM CORE">
+          <AdminSettings />
+        </AdminProtectedRoute>
+      );
 
     // Catch-all 404
     default:
@@ -103,7 +171,12 @@ export default function App() {
   return (
     <RouterProvider>
       <AdminAuthProvider>
+        {/* Accessibility Skip-to-Content Link */}
+        <a href="#main-content" className="skip-to-content-link">
+          Skip to main content
+        </a>
         <AppRoutes />
+        <CookieConsent />
       </AdminAuthProvider>
     </RouterProvider>
   );

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { useRouter } from '../../context/RouterContext';
+import { sanitizePlainText } from '../../services/securityService';
 import '../styles/admin.css';
 
 export default function AdminLogin() {
@@ -13,7 +14,7 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
 
   // If already authenticated, redirect to /admin
-  React.useEffect(() => {
+  useEffect(() => {
     if (isAuthenticated) {
       navigate('/admin');
     }
@@ -23,23 +24,20 @@ export default function AdminLogin() {
     e.preventDefault();
     setError('');
 
-    if (!email.trim() || !password.trim()) {
+    const cleanEmail = sanitizePlainText(email, 120);
+    const cleanPassword = password.trim();
+
+    if (!cleanEmail || !cleanPassword) {
       setError('Operator email and clearance passkey are required.');
       return;
     }
 
     try {
-      await login(email, password);
+      await login(cleanEmail, cleanPassword);
       navigate('/admin');
     } catch (err) {
       setError(err.message || 'Transmission clearance rejected.');
     }
-  };
-
-  const setDemoProfile = (demoEmail, demoPass) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError('');
   };
 
   return (
@@ -51,7 +49,7 @@ export default function AdminLogin() {
         <div className="login-panel-header">
           <img
             src="/icons/aarkonam-emblem.png"
-            alt="Aarkonam Directorate"
+            alt="Aarkonam Directorate Seal"
             className="login-emblem-img"
           />
           <h1 className="login-title hud-font">ADMIN CONTROL CENTER</h1>
@@ -65,7 +63,7 @@ export default function AdminLogin() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit} className="login-form" noValidate>
           <div className="form-group" style={{ marginBottom: '1.25rem' }}>
             <label className="form-label hud-font" htmlFor="admin-email">
               OPERATOR CREDENTIAL (EMAIL)
@@ -74,11 +72,13 @@ export default function AdminLogin() {
               id="admin-email"
               type="email"
               value={email}
+              maxLength={120}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="director@aarkonam.internal"
+              placeholder="operator@aarkonam.internal"
               className="form-input"
               autoComplete="username"
               required
+              aria-required="true"
             />
           </div>
 
@@ -91,6 +91,7 @@ export default function AdminLogin() {
                 type="button"
                 className="btn-toggle-pass hud-font"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? 'HIDE' : 'SHOW'}
               </button>
@@ -99,11 +100,13 @@ export default function AdminLogin() {
               id="admin-password"
               type={showPassword ? 'text' : 'password'}
               value={password}
+              maxLength={128}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••••••"
               className="form-input"
               autoComplete="current-password"
               required
+              aria-required="true"
             />
           </div>
 
@@ -117,46 +120,13 @@ export default function AdminLogin() {
           </button>
         </form>
 
-        {/* Development Quick Role Dispatch */}
-        <div className="login-role-dispatch">
-          <p className="dispatch-title hud-font">TEST OPERATOR PROFILES (CLICK TO LOAD)</p>
-          <div className="dispatch-buttons-grid">
-            <button
-              type="button"
-              className="role-dispatch-btn"
-              onClick={() => setDemoProfile('director@aarkonam.internal', 'ark-noir-director-2026')}
-            >
-              <span className="role-btn-title">Safin Mulani (Owner)</span>
-              <small className="role-btn-sub">Full System Authority</small>
-            </button>
-            <button
-              type="button"
-              className="role-dispatch-btn"
-              onClick={() => setDemoProfile('cto@aarkonam.internal', 'ark-noir-systems-2026')}
-            >
-              <span className="role-btn-title">Mohd Sumair (Admin)</span>
-              <small className="role-btn-sub">Systems, Content & Enquiries</small>
-            </button>
-            <button
-              type="button"
-              className="role-dispatch-btn"
-              onClick={() => setDemoProfile('finance@aarkonam.internal', 'ark-noir-finance-2026')}
-            >
-              <span className="role-btn-title">Adeba Firdous (Editor)</span>
-              <small className="role-btn-sub">Content & Media Editing</small>
-            </button>
-            <button
-              type="button"
-              className="role-dispatch-btn"
-              onClick={() => setDemoProfile('auditor@aarkonam.internal', 'ark-noir-audit-2026')}
-            >
-              <span className="role-btn-title">Auditor (Viewer)</span>
-              <small className="role-btn-sub">Read-Only Telemetry</small>
-            </button>
-          </div>
+        <div className="security-notice-row" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.6875rem', color: 'var(--muted-text)', letterSpacing: '0.08em', margin: 0 }}>
+            🔒 256-bit Salted Cryptographic Verification · Failed attempts throttled by Terminal Security Shield.
+          </p>
         </div>
 
-        <div className="login-footer-row">
+        <div className="login-footer-row" style={{ marginTop: '1.5rem' }}>
           <button
             type="button"
             className="link-return-public"

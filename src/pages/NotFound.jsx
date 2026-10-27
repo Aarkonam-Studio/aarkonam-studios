@@ -10,7 +10,7 @@ export default function NotFound() {
       <div className="ambient-grain" aria-hidden="true" />
       <div className="ambient-vignette" aria-hidden="true" />
 
-      <main className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', minHeight: '65vh' }}>
+      <main id="main-content" className="main-content" tabIndex="-1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', minHeight: '65vh' }}>
         <div className="content-wrapper">
           <div className="hud-tag gold" style={{ marginBottom: '1.25rem' }}>
             STATUS CODE 404 // ROUTE DISCONNECTED

@@ -11,7 +11,7 @@ export default function Contact() {
       <div className="ambient-grain" aria-hidden="true" />
       <div className="ambient-vignette" aria-hidden="true" />
 
-      <main className="main-content">
+      <main id="main-content" className="main-content" tabIndex="-1">
         <div className="content-wrapper">
           <SectionHeader
             eyebrow="COMMUNICATIONS RELAY // TRANSMISSION PORTAL"
@@ -43,7 +43,7 @@ export default function Contact() {
 
                 <div className="contact-info-block">
                   <span className="info-label hud-font">OFFICIAL DESTINATION</span>
-                  <p className="info-val emerald-accent">contact@aarkonamstudios.placeholder</p>
+                  <p className="info-val emerald-accent">aarkonamstudios@gmail.com</p>
                   <small className="info-sub">Subject to production routing queue</small>
                 </div>
 

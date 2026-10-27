@@ -96,7 +96,7 @@ export default function AdminProjects() {
                 setEditingProject({
                   id: `proj-${Date.now()}`,
                   title: '',
-                  category: 'ENGINE & TOOLS',
+                  category: 'Web Development',
                   status: 'In Active Development',
                   scope: 'Core Technology Research',
                   metric: '60 FPS Target',
@@ -137,7 +137,7 @@ export default function AdminProjects() {
             className="table-filter-select"
           >
             <option value="ALL">ALL CATEGORIES</option>
-            <option value="ENGINE & TOOLS">ENGINE & TOOLS</option>
+            <option value="Web Development">Web Development</option>
             <option value="AI / AUTOMATION">AI / AUTOMATION</option>
             <option value="SYSTEMS & SOFTWARE">SYSTEMS & SOFTWARE</option>
           </select>
@@ -285,7 +285,7 @@ export default function AdminProjects() {
                     onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
                     className="form-select"
                   >
-                    <option value="ENGINE & TOOLS">ENGINE & TOOLS</option>
+                    <option value="Web Development">Web Development</option>
                     <option value="AI / AUTOMATION">AI / AUTOMATION</option>
                     <option value="SYSTEMS & SOFTWARE">SYSTEMS & SOFTWARE</option>
                   </select>

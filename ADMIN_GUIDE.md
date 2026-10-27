@@ -25,7 +25,7 @@ Four pre-configured operator roles are provisioned for development and security 
 | **Adeba Firdous** | `finance@aarkonam.internal` | **Editor** | `ark-noir-finance-2026` | Content editing: realms, projects, homepage text, announcements, media library. |
 | **Security Reviewer** | `auditor@aarkonam.internal` | **Viewer** | `ark-noir-audit-2026` | Read-only access to metrics, audit trail, and public catalog data. |
 
-*(On the login screen, click any of the 4 quick-dispatch buttons to automatically load credentials for instant review.)*
+*(For production security hardening, credentials must be directly entered into the login terminal. All credentials are verified against salted SHA-256 hashes via the Web Crypto API, with brute-force rate-limiting and session inactivity timeouts.)*
 
 ---
 

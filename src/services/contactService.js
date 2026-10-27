@@ -6,6 +6,7 @@
  */
 import emailjs from '@emailjs/browser';
 import { store } from './storeService.js';
+import { sanitizePlainText } from './securityService.js';
 
 /**
  * Validates and retrieves current EmailJS environment configuration.
@@ -120,13 +121,13 @@ export async function submitContactInquiry(formData, metadata = {}) {
   // ---------------------------------------------------------------------------
 
   const cleanPayload = {
-    name: formData.name.trim(),
-    email: formData.email.trim(),
-    organization: formData.organization?.trim() || '',
+    name: sanitizePlainText(formData.name, 100),
+    email: sanitizePlainText(formData.email, 120),
+    organization: sanitizePlainText(formData.organization, 120),
     inquiryType: formData.inquiryType || 'General Studio Enquiry',
-    projectTitle: formData.projectTitle?.trim() || '',
+    projectTitle: sanitizePlainText(formData.projectTitle, 120),
     budgetRange: formData.budgetRange || 'Confidential / To Be Determined',
-    message: formData.message.trim(),
+    message: sanitizePlainText(formData.message, 4000),
     timestamp: new Date().toISOString(),
     clientOrigin: typeof window !== 'undefined' ? window.location.origin : 'direct',
     emailStatus: 'pending'
@@ -134,6 +135,16 @@ export async function submitContactInquiry(formData, metadata = {}) {
 
   // Record into store for the admin panel (/admin/enquiries)
   const storedRecord = store.addEnquiry(cleanPayload);
+
+  // If this is a statutory privacy or data erasure request, log dedicated compliance audit record
+  if (cleanPayload.inquiryType.includes('Privacy') || cleanPayload.inquiryType.includes('Erasure')) {
+    store.logAudit(
+      'DATA_PRIVACY_REQUEST',
+      'COMPLIANCE',
+      storedRecord.id,
+      `Statutory Data Subject Erasure / Access request logged for ${cleanPayload.email}. 30-day statutory resolution window started.`
+    );
+  }
 
   // Update session cooldown timestamp
   if (typeof window !== 'undefined') {
@@ -153,7 +164,7 @@ export async function submitContactInquiry(formData, metadata = {}) {
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // Stable EmailJS template parameters
+    // Stable EmailJS template parameters with CAN-SPAM / GDPR unsubscribe notice
     const templateParams = {
       from_name: cleanPayload.name,
       reply_to: cleanPayload.email,          // Visitor's email mapped to Reply-To
@@ -164,6 +175,7 @@ export async function submitContactInquiry(formData, metadata = {}) {
       budget_range: cleanPayload.budgetRange || 'Confidential / TBD',
       message: cleanPayload.message,
       reference_id: storedRecord.id,
+      unsubscribe_notice: 'To manage your communication preferences or submit a GDPR/CCPA erasure request, reply with "UNSUBSCRIBE" or email privacy@aarkonamstudios.com.',
       timestamp: new Date().toLocaleString('en-GB', {
         day: '2-digit',
         month: 'short',

@@ -53,7 +53,7 @@ export default function Studio() {
       <div className="ambient-grain" aria-hidden="true" />
       <div className="ambient-vignette" aria-hidden="true" />
 
-      <main className="main-content">
+      <main id="main-content" className="main-content" tabIndex="-1">
         {/* Studio Hero with Grand Archive Artwork */}
         <section className="studio-hero-section">
           <div className="studio-hero-backdrop">

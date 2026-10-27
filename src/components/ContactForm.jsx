@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { submitContactInquiry } from '../services/contactService';
+import { sanitizePlainText, checkRateLimit } from '../services/securityService';
+import { Link } from '../context/RouterContext';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -24,18 +26,19 @@ export default function ContactForm() {
   const inquiryTypes = [
     'Game Development',
     'Interactive & Real-time Software',
-    'AI & Autonomous Research Collaboration',
-    'Technology Licensing & Tools',
-    'Business & Publishing Partnership',
-    'General Studio Enquiry'
+    'AI & Automation Services',
+    'Web Development',
+    'Video Editing',
+    'General Studio Enquiry',
+    'Data Privacy & Erasure Request (GDPR / CCPA / DPDP)'
   ];
 
   const budgetOptions = [
     'Confidential / To Be Determined',
-    '$25,000 — $50,000',
-    '$50,000 — $150,000',
-    '$150,000 — $500,000',
-    '$500,000+'
+    '₹25,000 — ₹50,000',
+    '₹50,000 — ₹150,000',
+    '₹150,000 — ₹500,000',
+    '₹500,000+'
   ];
 
   const handleChange = (e) => {
@@ -54,17 +57,21 @@ export default function ContactForm() {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
+    const cleanName = sanitizePlainText(formData.name, 100);
+    const cleanEmail = sanitizePlainText(formData.email, 120);
+    const cleanMessage = sanitizePlainText(formData.message, 4000);
+
+    if (!cleanName) {
       newErrors.name = 'Full name is required for transmission.';
-    } else if (formData.name.trim().length > 100) {
+    } else if (cleanName.length > 100) {
       newErrors.name = 'Full name cannot exceed 100 characters.';
     }
 
-    if (!formData.email.trim()) {
+    if (!cleanEmail) {
       newErrors.email = 'Email address is required.';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       newErrors.email = 'Please enter a valid email address.';
-    } else if (formData.email.trim().length > 120) {
+    } else if (cleanEmail.length > 120) {
       newErrors.email = 'Email address cannot exceed 120 characters.';
     }
 
@@ -76,16 +83,16 @@ export default function ContactForm() {
       newErrors.projectTitle = 'Project title cannot exceed 120 characters.';
     }
 
-    if (!formData.message.trim()) {
+    if (!cleanMessage) {
       newErrors.message = 'Please provide details or a project brief.';
-    } else if (formData.message.trim().length < 15) {
+    } else if (cleanMessage.length < 15) {
       newErrors.message = 'Inquiry brief must be at least 15 characters long.';
-    } else if (formData.message.trim().length > 4000) {
+    } else if (cleanMessage.length > 4000) {
       newErrors.message = 'Inquiry brief cannot exceed 4000 characters.';
     }
 
     if (!formData.consent) {
-      newErrors.consent = 'Please confirm that you consent to transmission.';
+      newErrors.consent = 'Please confirm that you are at least 16 years old and consent to transmission.';
     }
 
     setErrors(newErrors);
@@ -100,8 +107,27 @@ export default function ContactForm() {
     setSubmitResult(null);
 
     try {
+      // 1. Client-side hourly rate-limiting (max 5 submissions per hour per browser session)
+      const rl = checkRateLimit('contact_submission', 5, 60 * 60 * 1000);
+      if (!rl.allowed) {
+        throw new Error(`Submission throttled. Excessive transmissions detected; please wait ${rl.retryAfterSeconds} seconds.`);
+      }
+
+      // 2. Strict XSS sanitization
+      const sanitizedPayload = {
+        name: sanitizePlainText(formData.name, 100),
+        email: sanitizePlainText(formData.email, 120),
+        organization: sanitizePlainText(formData.organization, 120),
+        inquiryType: formData.inquiryType,
+        projectTitle: sanitizePlainText(formData.projectTitle, 120),
+        budgetRange: formData.budgetRange,
+        message: sanitizePlainText(formData.message, 4000),
+        consent: formData.consent,
+        security_trap: formData.security_trap
+      };
+
       const elapsedMs = Date.now() - formMountedAt.current;
-      const response = await submitContactInquiry(formData, { elapsedMs });
+      const response = await submitContactInquiry(sanitizedPayload, { elapsedMs });
 
       setSubmitResult({
         success: true,
@@ -125,7 +151,7 @@ export default function ContactForm() {
       });
       formMountedAt.current = Date.now();
     } catch (err) {
-      // NOTE: Preserve entered formData on error so the visitor does not lose their typed brief!
+      // Preserve entered formData on error so the visitor does not lose their typed brief
       setSubmitResult({
         success: false,
         message: err.message || 'Transmission encountered an error. Please retry.'
@@ -270,7 +296,7 @@ export default function ContactForm() {
               value={formData.organization}
               onChange={handleChange}
               placeholder="Blackwood Interactive"
-              className={`form-input ${errors.organization ? 'input-error' : ''}`}
+              className="form-input"
             />
             {errors.organization && (
               <p id="org-error" className="error-text">
@@ -312,7 +338,7 @@ export default function ContactForm() {
               value={formData.projectTitle}
               onChange={handleChange}
               placeholder="Project Chimera"
-              className={`form-input ${errors.projectTitle ? 'input-error' : ''}`}
+              className="form-input"
             />
             {errors.projectTitle && (
               <p id="title-error" className="error-text">
@@ -321,7 +347,7 @@ export default function ContactForm() {
             )}
           </div>
 
-          {/* Budget Range */}
+          {/* Budget Scope */}
           <div className="form-group">
             <label htmlFor="contact-budget" className="form-label hud-font">
               BUDGET SCOPE <span className="opt-tag">(OPTIONAL)</span>
@@ -340,6 +366,28 @@ export default function ContactForm() {
               ))}
             </select>
           </div>
+
+          {/* Notice for Data Privacy & Erasure Requests */}
+          {formData.inquiryType === 'Data Privacy & Erasure Request (GDPR / CCPA / DPDP)' && (
+            <div
+              className="form-group full-width"
+              style={{
+                background: 'rgba(6, 59, 44, 0.2)',
+                border: '1px solid var(--border-emerald)',
+                borderLeft: '4px solid var(--emerald-cyan)',
+                padding: '1rem 1.25rem',
+                borderRadius: '2px',
+                marginTop: '0.5rem'
+              }}
+            >
+              <h5 className="hud-font" style={{ fontSize: '0.6875rem', letterSpacing: '0.14em', color: 'var(--emerald-cyan)', margin: '0 0 0.35rem 0' }}>
+                DATA SUBJECT ACCESS &amp; ERASURE PROTOCOL
+              </h5>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--silver)', margin: 0, lineHeight: '1.5' }}>
+                Your request will be prioritized and processed by the Studio Data Protection Officer within 30 statutory days. Zero promotional or marketing communications will be generated.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Project Description */}
@@ -367,7 +415,7 @@ export default function ContactForm() {
           )}
         </div>
 
-        {/* Privacy & NDA acknowledgement */}
+        {/* Privacy, Age & NDA acknowledgement */}
         <div className="form-group full-width consent-group">
           <label className="checkbox-label">
             <input
@@ -379,7 +427,14 @@ export default function ContactForm() {
             />
             <span className="checkbox-custom" />
             <span className="checkbox-text">
-              I acknowledge that this transmission will be handled under standard studio confidentiality and review protocols.
+              I confirm I am 16 years of age or older, and agree that this transmission will be handled under studio confidentiality protocols, the{' '}
+              <Link to="/privacy" style={{ color: 'var(--emerald-cyan)', textDecoration: 'underline' }}>
+                Privacy Policy
+              </Link>
+              , and{' '}
+              <Link to="/terms" style={{ color: 'var(--emerald-cyan)', textDecoration: 'underline' }}>
+                Terms of Service
+              </Link>.
             </span>
           </label>
           {errors.consent && (

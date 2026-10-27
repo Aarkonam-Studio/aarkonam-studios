@@ -32,7 +32,7 @@ export default function Projects() {
       <div className="ambient-grain" aria-hidden="true" />
       <div className="ambient-vignette" aria-hidden="true" />
 
-      <main className="main-content">
+      <main id="main-content" className="main-content" tabIndex="-1">
         <div className="content-wrapper">
           <SectionHeader
             eyebrow="APPLIED SYSTEMS // RESEARCH & TOOLS"

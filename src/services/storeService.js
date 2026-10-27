@@ -1,8 +1,26 @@
 import { gamesData } from '../data/games';
 import { projectsData } from '../data/projects';
 import { teamMembers } from '../data/team';
+import { sanitizePlainText } from './securityService.js';
 
 const STORAGE_KEY_PREFIX = 'ark_cms_';
+
+function deepSanitize(val) {
+  if (typeof val === 'string') {
+    return sanitizePlainText(val, 10000);
+  }
+  if (Array.isArray(val)) {
+    return val.map(deepSanitize);
+  }
+  if (val && typeof val === 'object') {
+    const cleaned = {};
+    for (const [k, v] of Object.entries(val)) {
+      cleaned[k] = deepSanitize(v);
+    }
+    return cleaned;
+  }
+  return val;
+}
 
 function getStored(key, fallback) {
   if (typeof window === 'undefined') return fallback;
@@ -18,7 +36,8 @@ function getStored(key, fallback) {
 function setStored(key, value) {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(`${STORAGE_KEY_PREFIX}${key}`, JSON.stringify(value));
+    const sanitized = deepSanitize(value);
+    localStorage.setItem(`${STORAGE_KEY_PREFIX}${key}`, JSON.stringify(sanitized));
     notifySubscribers();
   } catch (err) {
     console.error(`[Aarkonam Store] Write error for ${key}:`, err);

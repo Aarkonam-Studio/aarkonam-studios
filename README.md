@@ -45,7 +45,7 @@ The visual system is engineered around **Emerald Noir**, uniting dark fantasy ma
 
 4. **Projects (`/projects`) — Applied Technology & AI**
    - Featured technology showcase: *Aarkonam World Engine* (`game-neo-aarkonam-dusk.jpg`) with procedural urban transit generation benchmarks.
-   - Real, functional category filter tabs (`ALL`, `ENGINE & TOOLS`, `AI / AUTOMATION`, `SYSTEMS & SOFTWARE`).
+   - Real, functional category filter tabs (`ALL`, `Web Development`, `AI / AUTOMATION`, `SYSTEMS & SOFTWARE`).
    - Technical specifications for *Sentinel: Neural Agent Framework*, *Chronos Volumetric Pipeline*, and *Nexus Studio Telemetry Hub*.
 
 5. **Team (`/team`) — Leadership & Architects**
